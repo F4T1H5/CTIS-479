@@ -1,0 +1,19 @@
+﻿@{
+    @inject IConfiguration configuration
+}
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to @configuration["Title"]</h1>
+    @* Changed from <h1 class="display-4">Welcome to Products MVC</h1> to use Title in appsettings.json *@
+</div>
+
+@* Added to show App section's Version and Date values in appsettings.json: *@
+<p class="text-center">
+    Version: @configuration["App:Version"]
+    <br />
+    Date: @configuration["App:Date"]
+</p>
