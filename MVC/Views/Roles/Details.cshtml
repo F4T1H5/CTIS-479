@@ -5,58 +5,80 @@
 
 @{
     var containerDivClass = "container"; // "container-fluid" can be used for full width
-}
-@{
-    /*
-    ViewBag and ViewData are the same collection (dictionary).
-    They carry extra data other than the model from a controller action to its view, or between views.
-    The value assigned will be shown in Views\Shared\_Layout.cshtml view's title tag of the head tag.
-    */
     ViewData["Title"] = "Role Details";
 }
 
-<div class="@containerDivClass">
-    <h1>@ViewData["Title"]</h1>
-    <hr />
-</div>
+<div class="@containerDivClass py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
 
-@if (Model is not null)
-{
-<div class="@containerDivClass">
-    @if (TempData["Message"] is not null)
-    {
-    /*
-    TempData is used to carry extra data to the redirected controller action's view.
-    */
-    <p class="text-danger">
-        @TempData["Message"]
-    </p>
-    }
-    <div class="row mb-3">
-        <div class="col-2 fw-bold">
-            @Html.DisplayNameFor(model => model.Name)
-        </div>
-        <div class="col-10">
-            @Html.DisplayFor(model => model.Name)
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h1 class="h3 mb-1">@ViewData["Title"]</h1>
+                    <small class="text-muted">View information about this role.</small>
+                </div>
+                <div>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                        Back to List
+                    </a>
+                </div>
+            </div>
+
+            @if (TempData["Message"] is not null)
+            {
+                @* TempData is used to carry extra data to the redirected controller action's view. *@
+                <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                    @TempData["Message"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (Model is not null)
+            {
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 col-12 text-muted fw-semibold">
+                                @Html.DisplayNameFor(model => model.Name)
+                            </div>
+                            <div class="col-md-8 col-12">
+                                @Html.DisplayFor(model => model.Name)
+                            </div>
+                        </div>
+
+                        @* Can be uncommented and used for many to many relationships, 
+                           "entity" may be replaced with the related entity name in the controller and views.
+                           Raw HTML Helper is used in case string parameter may have HTML tags. *@
+                        @*
+                        <div class="row mb-3">
+                            <div class="col-md-4 col-12 text-muted fw-semibold">
+                                <b>@Html.DisplayNameFor(model => model.Entitys)</b>
+                            </div>
+                            <div class="col-md-8 col-12">
+                                @Html.Raw(Model.Entitys)
+                            </div>
+                        </div>
+                        *@
+
+                        <hr class="my-4" />
+
+                        <div class="d-flex flex-wrap gap-2 justify-content-end">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                                Edit
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                                Delete
+                            </a>
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                Back to List
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
         </div>
     </div>
-
-@* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. 
-    Raw HTML Helper is used in case string parameter may have HTML tags. *@
-    @*
-    <div class="row mb-3">
-        <div class="col-2 fw-bold">
-            <b>@Html.DisplayNameFor(model => model.Entitys)</b>
-        </div>
-        <div class="col-10">
-            @Html.Raw(Model.Entitys)
-        </div>
-    </div>
-    *@
-
-    <hr /> 
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>&nbsp;|&nbsp;
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>&nbsp;|&nbsp;
-    <a asp-action="Index">Back to List</a>
 </div>
-}

@@ -4,44 +4,60 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="row">
-    <div class="col-md-6 offset-md-3">
-        <h1 class="text-center mb-4">@ViewData["Title"]</h1>
-        
-        <div class="card">
-            <div class="card-body">
-                <form asp-action="Login" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                    
-                    <div class="form-group mb-3">
-                        <label asp-for="UserName" class="control-label"></label>
-                        <input asp-for="UserName" class="form-control" placeholder="Enter your username" />
-                        <span asp-validation-for="UserName" class="text-danger"></span>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    
-                    <div class="form-group mb-3">
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
-                    </div>
-                    
-                    <div class="text-center">
-                        <p>Don't have an account? <a asp-action="Register">Register here</a></p>
-                    </div>
-                </form>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+
+            <div class="text-center mb-4">
+                <h1 class="fw-bold">@ViewData["Title"]</h1>
+                <p class="text-muted mb-0">Welcome back! Please log in to continue.</p>
             </div>
-        </div>
-        
-        <div class="text-center mt-3">
-            <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back to Home</a>
+
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+
+                    <form asp-action="Login" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="form-label"></label>
+                            <input asp-for="UserName" class="form-control form-control-lg" placeholder="Enter your username" />
+                            <span asp-validation-for="UserName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" type="password" class="form-control form-control-lg" placeholder="Enter your password" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                            Login
+                        </button>
+
+                        <div class="text-center">
+                            <small class="text-muted">
+                                Don't have an account?
+                                <a asp-action="Register" class="fw-semibold">Register here</a>
+                            </small>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a asp-action="Index" asp-controller="Home" class="btn btn-outline-secondary btn-sm">
+                    Back to Home
+                </a>
+            </div>
+
         </div>
     </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
