@@ -64,5 +64,8 @@ namespace APP.Models
         public string Country { get; set; }
 
         public string City { get; set; }
+
+        [DisplayName("Roles")]
+        public List<RoleResponse> RoleList { get; set; }
     }
 }

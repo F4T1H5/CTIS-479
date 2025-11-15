@@ -119,7 +119,14 @@ namespace APP.Services
                 Group = entity.Group != null ? entity.Group.Title : null,
                 Roles = entity.UserRoles.Select(ur => ur.Role.Name).ToList(),
                 Country = entity.Country != null ? entity.Country.CountryName : string.Empty,
-                City = entity.City != null ? entity.City.CityName : string.Empty
+                City = entity.City != null ? entity.City.CityName : string.Empty,
+
+                RoleList = entity.UserRoles.Select(userRoleEntity => new RoleResponse
+                {
+                    Id = userRoleEntity.Role.Id,
+                    Guid = userRoleEntity.Role.Guid,
+                    Name = userRoleEntity.Role.Name,
+                }).ToList()
             };
         }
 
@@ -153,7 +160,14 @@ namespace APP.Services
                 Group = u.Group != null ? u.Group.Title : null,
                 Roles = u.UserRoles.Select(ur => ur.Role.Name).ToList(),
                 Country = u.Country != null ? u.Country.CountryName : string.Empty,
-                City = u.City != null ? u.City.CityName : string.Empty
+                City = u.City != null ? u.City.CityName : string.Empty,
+
+                RoleList = u.UserRoles.Select(userRoleEntity => new RoleResponse
+                { 
+                    Id = userRoleEntity.Role.Id,
+                    Guid = userRoleEntity.Role.Guid,
+                    Name = userRoleEntity.Role.Name,
+                }).ToList()
             }).ToList();
         }
 

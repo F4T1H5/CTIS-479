@@ -132,15 +132,13 @@
         <input type="hidden" asp-for="Id" />
 
 @* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. *@
-        @*
         <div class="row mb-3">
-            <label asp-for="EntityIds" class="col-2 col-form-label fw-bold"></label>
+            <label asp-for="RoleIds" class="col-2 col-form-label fw-bold"></label>
 	        <div class="col-10">
-		        <select multiple asp-for="EntityIds" class="form-select" asp-items="ViewBag.EntityIds"></select>
-		        <span asp-validation-for="EntityIds" class="text-danger"></span>
+                    <select multiple asp-for="RoleIds" class="form-select" asp-items="ViewBag.RoleIds"></select>
+                    <span asp-validation-for="RoleIds" class="text-danger"></span>
 	        </div>
         </div>
-        *@
 
         <hr />
         <div class="row mb-3">
