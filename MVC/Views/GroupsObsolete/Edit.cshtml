@@ -10,15 +10,10 @@
     @ViewBag.Message
 </p>
 
-@* Show the form if group request Model object is not returned null from the Edit action of Groups controller *@
 @if (Model is not null)
 {
-    @* HTML form for sending group request data to the Groups controller's Update POST action. *@
     <form asp-action="Edit">
 
-        @* Way 1: HTML Helper *@
-        @* @Html.HiddenFor(groupRequest => groupRequest.Id) *@
-        @* Way 2: Tag Helper, we need to send the GroupRequest Model's Id property value to the post Edit action for the update operation *@
         <input type="hidden" asp-for="Id" />
 
         <div class="row">

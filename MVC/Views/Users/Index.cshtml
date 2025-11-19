@@ -1,10 +1,7 @@
 ﻿@model IEnumerable<UserResponse>
 
-@* Generated from Custom MVC Template. *@
-@* Model namespace using directive should be added to _ViewImports.cshtml. *@
-
 @{
-    var containerDivClass = "container"; // "container-fluid" can be used for full width
+    var containerDivClass = "container";
     ViewData["Title"] = "User List";
 }
 
@@ -71,7 +68,6 @@
                                         @Html.DisplayFor(modelItem => item.RegistrationDateF)
                                     </td>
                                     <td>
-                                        @* If IsActiveF is a string like "Active"/"Passive" you can still style it *@
                                         @if (item.IsActiveF?.ToString().ToLower().Contains("active") == true)
                                         {
                                             <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">

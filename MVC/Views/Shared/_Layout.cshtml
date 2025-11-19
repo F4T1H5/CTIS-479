@@ -31,7 +31,9 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">@configuration["Title"]</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-code-square"></i> @configuration["Title"]
+                </a>
 
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,30 +51,20 @@
                                 @if (User.IsInRole("Admin"))
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">Roles</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Countries" asp-action="Index">Countries</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Cities" asp-action="Index">Cities</a>
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">
+                                            <i class="bi bi-shield-check"></i> Roles
+                                        </a>
                                     </li>
                                 }
 
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">
+                                        <i class="bi bi-people-fill"></i> Users
+                                    </a>
                                 </li>
-                                <li class="nav-item">
+                                @* <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Groups" asp-action="Index">Groups</a>
-                                </li>
-
-                                @* Keep if this page should be visible to signed-in users; remove if not needed *@
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Locations" asp-action="InnerJoinIndex">Countries and Cities</a>
-                                </li>
+                                </li> *@
                             }
                             @* When not authenticated and not on login/register pages, keep the left-side menu empty to avoid unrelated links *@
                         }
@@ -86,20 +78,26 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Details"
                                        asp-route-id="@User.Claims.SingleOrDefault(claim => claim.Type == "Id")?.Value">
-                                        @User.Identity.Name
+                                        <i class="bi bi-person-circle"></i> @User.Identity.Name
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </a>
                                 </li>
                             }
                             else
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Register">Register</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Register">
+                                        <i class="bi bi-person-plus"></i> Register
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">
+                                        <i class="bi bi-box-arrow-in-right"></i> Login
+                                    </a>
                                 </li>
                             }
                         </ul>
@@ -121,7 +119,9 @@
     {
         <footer class="border-top footer text-muted">
             <div class="container-fluid">
-                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">
+                    <i class="bi bi-shield-lock"></i> Privacy
+                </a>
             </div>
         </footer>
     }

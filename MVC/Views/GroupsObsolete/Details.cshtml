@@ -10,26 +10,14 @@
     @ViewBag.Message
 </p>
 
-@* Show if group response Model object is not returned null from the Details action of Groups controller *@
 @if (Model is not null)
 {
 
     <dl>
         <dt>@Html.DisplayNameFor(groupResponse => groupResponse.Title)</dt>
 
-        @* Way 1: to write the GroupResponse Model's Title property value *@
-        @* @Model.Title *@
-        @* Way 2: HTML Helper *@
         <dd>@Html.DisplayFor(groupResponse => groupResponse.Title)</dd>
     </dl>
-    @* e.g. the printed HTML will be: 
-    <dl>
-        <dt>Title</dt>
-        <dd>Computer</dd>
-        <dt>Description</dt>
-        <dd>Desktops, laptops and servers.</dd>
-    </dl> *@
-
 }
 <hr />
 <a asp-action="Index" class="btn btn-outline-dark">Back to Group List</a>

@@ -29,30 +29,25 @@ namespace APP.Models
         [DisplayName("Birth Date")]
         public DateTime? BirthDate { get; set; }
 
-        // We don't need to get the RegistrationDate from the client since it will be assigned automatically in the service.
-
-        [Range(0, 5, ErrorMessage = "{0} must be between {1} and {2}!")] // minimum value can be 0, maximum value can be 5
+        [Range(0, 5, ErrorMessage = "{0} must be between {1} and {2}!")]
         [Required(ErrorMessage = "{0} is required!")]
-        public decimal? Score { get; set; } // changed from decimal to decimal? and added [Required] to show validation error message
+        public decimal? Score { get; set; }
 
         [DisplayName("Active")]
         public bool IsActive { get; set; }
 
         public string Address { get; set; }
 
-        //[Required(ErrorMessage = "{0} is required!")] // can be defined if each user must belong to a group
         [DisplayName("Group")]
         public int? GroupId { get; set; }
 
-        [Required(ErrorMessage = "{0} is required!")] // each user must have at least one role
+        [Required(ErrorMessage = "{0} is required!")]
         [DisplayName("Roles")]
         public List<int> RoleIds { get; set; }
 
-        //[Required(ErrorMessage = "{0} is required!")] // can be defined if each user must belong to a country
         [DisplayName("Country")]
         public int? CountryId { get; set; }
 
-        //[Required(ErrorMessage = "{0} is required!")] // can be defined if each user must belong to a city
         [DisplayName("City")]
         public int? CityId { get; set; }
     }
