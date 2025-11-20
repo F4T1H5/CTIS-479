@@ -82,14 +82,23 @@ namespace APP.Services
         public CommandResponse Delete(int id)
         {
             var entity = _db.Groups.Find(id);
-
+            
             if (entity is null)
                 return Error("Group not found!");
-
+            
+            var usersInGroup = _db.Users.Where(u => u.GroupId == id).ToList();
+            
+            if (usersInGroup.Any())
+            {
+                foreach (var user in usersInGroup)
+                {
+                    user.GroupId = null;
+                }
+            }
+            
             _db.Groups.Remove(entity);
-
             _db.SaveChanges();
-
+            
             return Success("Group deleted successfully.", entity.Id);
         }
     }
