@@ -1,6 +1,7 @@
 using APP.Domain;
 using APP.Models;
 using APP.Services;
+using APP.Data; // Add this
 using CORE.APP.Services;
 using CORE.APP.Services.Authentication.MVC;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -34,36 +35,18 @@ builder.Services.AddScoped<ICookieAuthService, CookieAuthService>();
 
 var app = builder.Build();
 
+// Initialize database
 using (var scope = app.Services.CreateScope())
 {
     try
     {
         var db = scope.ServiceProvider.GetRequiredService<Db>();
-
-        db.Database.EnsureCreated();
-
-        var requiredRoles = new[] { "Admin", "User" };
-        var existing = db.Roles.Select(r => r.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-        var toAdd = requiredRoles.Where(name => !existing.Contains(name))
-                                 .Select(name => new Role { Name = name })
-                                 .ToList();
-
-        if (toAdd.Count > 0)
-        {
-            Console.WriteLine($"Seeding missing roles: {string.Join(", ", toAdd.Select(r => r.Name))}");
-            db.Roles.AddRange(toAdd);
-            db.SaveChanges();
-        }
-
-        Console.WriteLine("Roles in DB:");
-        foreach (var role in db.Roles.OrderBy(r => r.Name))
-            Console.WriteLine($"- {role.Name} (ID: {role.Id})");
+        DbInitializer.Initialize(db);
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Error during seeding: {ex.Message}");
-        Console.WriteLine(ex.StackTrace);
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
     }
 }
 
@@ -71,7 +54,6 @@ using (var scope = app.Services.CreateScope())
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -80,7 +62,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// Add Authentication & Authorization middleware
 app.UseAuthentication();
 app.UseAuthorization();
 
