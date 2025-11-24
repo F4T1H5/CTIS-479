@@ -34,8 +34,14 @@ namespace APP.Services
             var entity = Query(false).SingleOrDefault(g => g.Id == id);
             if (entity is null)
                 return Error("Group not found!");
+            
+            // Provide helpful error message with count
             if (entity.Users.Any())
-                return Error("Group can't be deleted because it has relational users!");
+            {
+                var userCount = entity.Users.Count;
+                return Error($"Group can't be deleted because it has {userCount} relational user(s). Please reassign or remove users first.");
+            }
+            
             Delete(entity);
             return Success("Group deleted successfully.", entity.Id);
         }

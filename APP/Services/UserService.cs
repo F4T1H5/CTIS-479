@@ -2,7 +2,7 @@
 using APP.Models;
 using CORE.APP.Models;
 using CORE.APP.Services;
-//using CORE.APP.Services.Authentication.MVC;
+using CORE.APP.Services.Authentication.MVC;
 using Microsoft.EntityFrameworkCore;
 
 namespace APP.Services

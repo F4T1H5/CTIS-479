@@ -7,20 +7,19 @@ using APP.Models;
 
 namespace MVC.Controllers
 {
-    public class RolesController : Controller
+    public class GroupsController : Controller
     {
-        private readonly IService<RoleRequest, RoleResponse> _roleService;
+        private readonly IService<GroupRequest, GroupResponse> _groupService;
 
-        public RolesController(
-			IService<RoleRequest, RoleResponse> roleService
+        public GroupsController(
+			IService<GroupRequest, GroupResponse> groupService
         )
         {
-            _roleService = roleService;
+            _groupService = groupService;
         }
 
         private void SetViewData()
         {
-
         }
 
         private void SetTempData(string message, string key = "Message")
@@ -30,13 +29,13 @@ namespace MVC.Controllers
 
         public IActionResult Index()
         {
-            var list = _roleService.List();
+            var list = _groupService.List();
             return View(list);
         }
 
         public IActionResult Details(int id)
         {
-            var item = _roleService.Item(id);
+            var item = _groupService.Item(id);
             return View(item);
         }
 
@@ -47,11 +46,11 @@ namespace MVC.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Create(RoleRequest role)
+        public IActionResult Create(GroupRequest @group)
         {
             if (ModelState.IsValid)
             {
-                var response = _roleService.Create(role);
+                var response = _groupService.Create(@group);
                 if (response.IsSuccessful)
                 {
                     SetTempData(response.Message);
@@ -60,22 +59,22 @@ namespace MVC.Controllers
                 ModelState.AddModelError("", response.Message);
             }
             SetViewData();
-            return View(role);
+            return View(@group);
         }
 
         public IActionResult Edit(int id)
         {
-            var item = _roleService.Edit(id);
+            var item = _groupService.Edit(id);
             SetViewData();
             return View(item);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Edit(RoleRequest role)
+        public IActionResult Edit(GroupRequest @group)
         {
             if (ModelState.IsValid)
             {
-                var response = _roleService.Update(role);
+                var response = _groupService.Update(@group);
                 if (response.IsSuccessful)
                 {
                     SetTempData(response.Message);
@@ -84,19 +83,19 @@ namespace MVC.Controllers
                 ModelState.AddModelError("", response.Message);
             }
             SetViewData();
-            return View(role);
+            return View(@group);
         }
 
         public IActionResult Delete(int id)
         {
-            var item = _roleService.Item(id);
+            var item = _groupService.Item(id);
             return View(item);
         }
 
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {
-            var response = _roleService.Delete(id);
+            var response = _groupService.Delete(id);
             SetTempData(response.Message);
             return RedirectToAction(nameof(Index));
         }

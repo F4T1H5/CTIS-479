@@ -2,6 +2,7 @@ using APP.Domain;
 using APP.Models;
 using APP.Services;
 using CORE.APP.Services;
+using CORE.APP.Services.Authentication.MVC;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,12 +24,14 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
     });
 
-builder.Services.AddScoped<GroupObsoleteService>();
+//builder.Services.AddScoped<GroupObsoleteService>();
 
 builder.Services.AddScoped<IService<GroupRequest, GroupResponse>, GroupService>();
 builder.Services.AddScoped<IService<RoleRequest, RoleResponse>, RoleService>();
 builder.Services.AddScoped<IService<UserRequest, UserResponse>, UserService>();
+
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<ICookieAuthService, CookieAuthService>();
 
 var app = builder.Build();
