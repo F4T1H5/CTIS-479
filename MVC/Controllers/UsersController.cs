@@ -52,32 +52,43 @@ namespace MVC.Controllers
             return id.ToString() == (User.Claims.SingleOrDefault(claim => claim.Type == "Id")?.Value ?? string.Empty);
         }
 
-        //[Authorize] // Only authenticated users can execute this action.
+        [Authorize]
         public IActionResult Details(int id)
         {
-            // Check if the user is in Admin role or trying to make the operation on his/her own account.
-            //if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
-            //{
-            //    SetTempData("You are not authorized for this operation!");
-            //    return RedirectToAction(nameof(Index));
-            //}
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
 
             var item = _userService.Item(id);
             return View(item);
         }
 
-        //[Authorize(Roles = "Admin")] // Only authenticated users with role Admin can execute this action.
+        [Authorize]
         public IActionResult Create()
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             SetViewData();
 
             return View();
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        //[Authorize(Roles = "Admin")] // Only authenticated users with role Admin can execute this action.
+        [Authorize]
         public IActionResult Create(UserRequest user)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (ModelState.IsValid)
             {
                 var response = _userService.Create(user);
@@ -93,15 +104,14 @@ namespace MVC.Controllers
             return View(user);
         }
 
-        //[Authorize] // Only authenticated users can execute this action.
+        [Authorize]
         public IActionResult Edit(int id)
         {
-            // Check if the user is in Admin role or trying to make the operation on his/her own account.
-            //if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
-            //{
-            //    SetTempData("You are not authorized for this operation!");
-            //    return RedirectToAction(nameof(Index));
-            //}
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
 
             var item = _userService.Edit(id);
             SetViewData();
@@ -110,15 +120,14 @@ namespace MVC.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        //[Authorize] // Only authenticated users can execute this action.
+        [Authorize]
         public IActionResult Edit(UserRequest user)
         {
-            // Check if the user is in Admin role or trying to make the operation on his/her own account.
-            //if (!IsOwnAccount(user.Id) && !User.IsInRole("Admin"))
-            //{
-            //    SetTempData("You are not authorized for this operation!");
-            //    return RedirectToAction(nameof(Index));
-            //}
+            if (!IsOwnAccount(user.Id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
 
             // Because we don't get the values for the Score and RoleIds properties from the user request for users not in
             // the Admin role, and Score and RoleIds are required, we must remove the ModelState error for the Score and
@@ -144,31 +153,28 @@ namespace MVC.Controllers
             return View(user);
         }
 
-        //[Authorize] // Only authenticated users can execute this action.
+        [Authorize]
         public IActionResult Delete(int id)
         {
-            // Check if the user is in Admin role or trying to make the operation on his/her own account.
-            //if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
-            //{
-            //    SetTempData("You are not authorized for this operation!");
-            //    return RedirectToAction(nameof(Index));
-            //}
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("you are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
 
-            // Get item to delete service logic:
             var item = _userService.Item(id);
-            return View(item); // return response item as model to the Delete view
+            return View(item);
         }
 
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
-        //[Authorize] // Only authenticated users can execute this action.
+        [Authorize]
         public IActionResult DeleteConfirmed(int id)
         {
-            // Check if the user is in Admin role or trying to make the operation on his/her own account.
-            //if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
-            //{
-            //    SetTempData("You are not authorized for this operation!");
-            //    return RedirectToAction(nameof(Index));
-            //}
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
 
             var response = _userService.Delete(id);
             SetTempData(response.Message);
