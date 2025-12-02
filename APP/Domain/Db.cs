@@ -12,6 +12,11 @@ namespace APP.Domain
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
 
+        public DbSet<Movie> Movies { get; set; }
+        public DbSet<Director> Directors { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<MovieGenre> MovieGenres { get; set; }
+
         public Db(DbContextOptions options) : base(options)
         {
         }
@@ -60,8 +65,49 @@ namespace APP.Domain
                 .HasForeignKey(userEntity => userEntity.GroupId) // the foreign key property in the User entity that
                                                                  // references the primary key of the related Group entity
                 .OnDelete(DeleteBehavior.NoAction); // prevents deletion of a Group entity if there are related User entities
+
+
+            // =========================
+            // MOVIES
+            // =========================
+
+            modelBuilder.Entity<Genre>()
+                .HasIndex(genreEntity => genreEntity.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Director>()
+                .HasIndex(directorEntity => new { directorEntity.FirstName, directorEntity.LastName });
+
+            modelBuilder.Entity<Movie>()
+                .HasIndex(movieEntity => movieEntity.Name)
+                .IsUnique(); // remove if movies with same name are allowed
+
+            modelBuilder.Entity<Movie>()
+                .Property(movieEntity => movieEntity.TotalRevenue)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Movie>()
+                .HasOne(movieEntity => movieEntity.Director)          // each Movie has one Director
+                .WithMany(directorEntity => directorEntity.Movies)    // each Director has many Movies
+                .HasForeignKey(movieEntity => movieEntity.DirectorId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // Many-to-many via join table: MovieGenre(MovieId, GenreId)
+            modelBuilder.Entity<MovieGenre>()
+                .HasKey(movieGenreEntity => new { movieGenreEntity.MovieId, movieGenreEntity.GenreId });
+
+            modelBuilder.Entity<MovieGenre>()
+                .HasOne(movieGenreEntity => movieGenreEntity.Movie)
+                .WithMany(movieEntity => movieEntity.MovieGenres)
+                .HasForeignKey(movieGenreEntity => movieGenreEntity.MovieId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MovieGenre>()
+                .HasOne(movieGenreEntity => movieGenreEntity.Genre)
+                .WithMany(genreEntity => genreEntity.MovieGenres)
+                .HasForeignKey(movieGenreEntity => movieGenreEntity.GenreId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
-
-
     }
 }

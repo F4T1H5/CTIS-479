@@ -1,7 +1,7 @@
 using APP.Domain;
 using APP.Models;
 using APP.Services;
-using APP.Data; // Add this
+using APP.Data;
 using CORE.APP.Services;
 using CORE.APP.Services.Authentication.MVC;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -28,6 +28,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddScoped<IService<GroupRequest, GroupResponse>, GroupService>();
 builder.Services.AddScoped<IService<RoleRequest, RoleResponse>, RoleService>();
 builder.Services.AddScoped<IService<UserRequest, UserResponse>, UserService>();
+
+builder.Services.AddScoped<IService<DirectorRequest, DirectorResponse>, DirectorService>();
+builder.Services.AddScoped<IService<GenreRequest, GenreResponse>, GenreService>();
+builder.Services.AddScoped<IService<MovieRequest, MovieResponse>, MovieService>();
+
 
 builder.Services.AddHttpContextAccessor();
 
