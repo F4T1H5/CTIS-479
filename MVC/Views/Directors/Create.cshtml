@@ -1,0 +1,108 @@
+﻿@model DirectorRequest
+
+@{
+    var containerDivClass = "container";
+    ViewData["Title"] = "Director Create";
+}
+
+<div class="@containerDivClass py-4">
+    <div class="row justify-content-center">
+        <div class="col-xl-9 col-lg-10">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h1 class="h3 mb-1">@ViewData["Title"]</h1>
+                    <small class="text-muted">Create a new director and manage their properties.</small>
+                </div>
+                <div>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                        Back to List
+                    </a>
+                </div>
+            </div>
+
+            @* Keeping TempData pattern from your template, but styled like the "main design" *@
+            @if (TempData["Message"] is not null)
+            {
+                <div class="alert alert-info alert-dismissible fade show mb-3" role="alert">
+                    @TempData["Message"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-4 p-md-5">
+
+                    <form asp-action="Create" autocomplete="off" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                        <!-- FirstName -->
+                        <div class="row mb-3">
+                            <label asp-for="FirstName" class="col-md-3 col-12 col-form-label fw-semibold"></label>
+                            <div class="col-md-9 col-12">
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- LastName -->
+                        <div class="row mb-3">
+                            <label asp-for="LastName" class="col-md-3 col-12 col-form-label fw-semibold"></label>
+                            <div class="col-md-9 col-12">
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- IsRetired -->
+                        <div class="row mb-3">
+                            <label asp-for="IsRetired" class="col-md-3 col-12 col-form-label fw-semibold"></label>
+                            <div class="col-md-9 col-12 pt-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" asp-for="IsRetired" />
+                                    <label class="form-check-label" asp-for="IsRetired"></label>
+                                </div>
+                                <span asp-validation-for="IsRetired" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        @* Example many-to-many (kept, but matching spacing/style) *@
+                        @*
+                        <div class="row mb-3">
+                            <label asp-for="EntityIds" class="col-md-3 col-12 col-form-label fw-semibold"></label>
+                            <div class="col-md-9 col-12">
+                                <select multiple asp-for="EntityIds" class="form-select" asp-items="ViewBag.EntityIds"></select>
+                                <span asp-validation-for="EntityIds" class="text-danger small"></span>
+                            </div>
+                        </div>
+                        *@
+
+                        <hr class="my-4" />
+
+                        <div class="d-flex flex-wrap gap-2 justify-content-end">
+                            <button type="submit" class="btn btn-primary">
+                                Create
+                            </button>
+                            <button type="reset" class="btn btn-outline-primary">
+                                Reset
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                Back to Director List
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @* If you use jQuery validation, enable this *@
+    @* <partial name="_ValidationScriptsPartial" /> *@
+}

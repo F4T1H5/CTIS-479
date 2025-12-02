@@ -15,6 +15,6 @@ namespace APP.Models
         public string FullName { get; set; }
 
         [DisplayName("Retired")]
-        public bool IsRetiredF { get; set; }
+        public string IsRetiredF { get; set; }
     }
 }

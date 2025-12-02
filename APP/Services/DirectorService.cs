@@ -86,7 +86,9 @@ namespace APP.Services
                 Guid = entity.Guid,
                 FirstName = entity.FirstName,
                 LastName = entity.LastName,
-                IsRetired = entity.IsRetired
+                IsRetired = entity.IsRetired,
+                FullName = entity.FirstName + " " + entity.LastName,
+                IsRetiredF = entity.IsRetired ? "Retired" : "Active"
             };
         }
 
@@ -98,7 +100,9 @@ namespace APP.Services
                 Guid = d.Guid,
                 FirstName = d.FirstName,
                 LastName = d.LastName,
-                IsRetired = d.IsRetired
+                IsRetired = d.IsRetired,
+                FullName = d.FirstName + " " + d.LastName,
+                IsRetiredF = d.IsRetired ? "Retired" : "Active"
             }).ToList();
         }
 
