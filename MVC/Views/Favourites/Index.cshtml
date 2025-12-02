@@ -1,0 +1,120 @@
+﻿@model IEnumerable<FavouriteMovieGroupedBy>
+
+@{
+    var containerDivClass = "container";
+    ViewData["Title"] = "Favourites";
+}
+
+<div class="@containerDivClass py-4">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-11">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h1 class="h3 mb-1">@ViewData["Title"]</h1>
+                    <small class="text-muted">Your saved movies grouped with counts.</small>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <a asp-action="Clear" class="btn btn-outline-danger btn-sm"
+                       onclick="return confirm('Clear all favourites?');">
+                        <i class="bi bi-trash3 me-1"></i> Clear
+                    </a>
+                    <a asp-action="Index" asp-controller="Movies" class="btn btn-outline-secondary btn-sm">
+                        <i class="bi bi-film me-1"></i> Browse Movies
+                    </a>
+                </div>
+            </div>
+
+            @if (TempData["Message"] is not null)
+            {
+                <div class="alert alert-warning alert-dismissible fade show mb-3" role="alert">
+                    @TempData["Message"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            @if (Model is not null && Model.Any())
+            {
+                <div class="card shadow-lg border-0 rounded-4">
+                    <div class="card-body p-3 p-md-4">
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="text-muted">
+                                <i class="bi bi-heart-fill text-danger me-1"></i>
+                                <span class="badge bg-secondary me-1">@Model.Count()</span>
+                                item(s)
+                            </div>
+
+                            <div class="text-muted">
+                                <span class="me-1">Total saved:</span>
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                                    @Model.Sum(m => m.MovieCount)
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>@Html.DisplayNameFor(model => model.MovieName)</th>
+                                        <th style="width: 160px;">@Html.DisplayNameFor(model => model.MovieCount)</th>
+                                        <th class="text-end" style="width: 210px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold">
+                                                @Html.DisplayFor(modelItem => item.MovieName)
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3 py-2 rounded-pill">
+                                                    @Html.DisplayFor(modelItem => item.MovieCount)
+                                                </span>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="d-flex justify-content-end gap-2">
+                                                    <a asp-action="Remove" asp-route-productId="@item.MovieId"
+                                                       class="btn btn-outline-danger btn-sm"
+                                                       title="Remove from favourites">
+                                                        <i class="bi bi-heartbreak me-1"></i> Remove
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+
+                                <tfoot class="table-light">
+                                    <tr>
+                                        <td class="fw-bold">Total</td>
+                                        <td colspan="2" class="fw-bold">
+                                            @Model.Sum(m => m.MovieCount)
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-success border-0 shadow-sm rounded-4 mt-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <div>
+                            <div class="fw-semibold">Favourites is empty.</div>
+                            <div class="text-muted small">Add some movies to see them here.</div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

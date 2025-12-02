@@ -1,9 +1,10 @@
+using APP.Data;
 using APP.Domain;
 using APP.Models;
 using APP.Services;
-using APP.Data;
 using CORE.APP.Services;
 using CORE.APP.Services.Authentication.MVC;
+using CORE.APP.Services.Session.MVC;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +39,15 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ICookieAuthService, CookieAuthService>();
 
+builder.Services.AddSession(config =>
+{
+    config.IdleTimeout = TimeSpan.FromMinutes(30);
+});
+
+builder.Services.AddScoped<SessionServiceBase, SessionService>();
+
+builder.Services.AddScoped<IFavouriteService, FavouriteService>();
+
 var app = builder.Build();
 
 // Initialize database
@@ -69,6 +79,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

@@ -62,6 +62,12 @@
                                         <i class="bi bi-tags"></i> Genres
                                     </a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Favourites" asp-action="Index">
+                                    <i class="bi bi-tags"></i> Favourites
+                                    </a>
+                                </li>
                             
                             @* Only show application links when authenticated *@
                             @if (User.Identity.IsAuthenticated)
