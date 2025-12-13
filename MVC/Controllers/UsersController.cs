@@ -158,7 +158,7 @@ namespace MVC.Controllers
         {
             if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
             {
-                SetTempData("you are not authorized for this operation!");
+                SetTempData("You are not authorized for this operation!");
                 return RedirectToAction(nameof(Index));
             }
 

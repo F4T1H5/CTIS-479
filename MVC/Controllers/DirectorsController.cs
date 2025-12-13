@@ -8,142 +8,112 @@ using APP.Models;
 
 namespace MVC.Controllers
 {
-    [Authorize] // All users must be authenticated to access any action
+    [Authorize]
     public class DirectorsController : Controller
     {
-        // Service injections:
         private readonly IService<DirectorRequest, DirectorResponse> _directorService;
-
-        /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
-        //private readonly IService<EntityRequest, EntityResponse> _EntityService;
 
         public DirectorsController(
 			IService<DirectorRequest, DirectorResponse> directorService
-
-            /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
-            //, IService<EntityRequest, EntityResponse> EntityService
         )
         {
             _directorService = directorService;
-
-            /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
-            //_EntityService = EntityService;
         }
 
         private void SetViewData()
         {
-            /* 
-            ViewBag and ViewData are the same collection (dictionary).
-            They carry extra data other than the model from a controller action to its view, or between views.
-            */
-
-            // Related items service logic to set ViewData (Id and Name parameters may need to be changed in the SelectList constructor according to the model):
-            
-            /* Can be uncommented and used for many to many relationships, "entity" may be replaced with the related entity name in the controller and views. */
-            //ViewBag.EntityIds = new MultiSelectList(_EntityService.List(), "Id", "Name");
         }
 
         private void SetTempData(string message, string key = "Message")
         {
-            /*
-            TempData is used to carry extra data to the redirected controller action's view.
-            */
-
             TempData[key] = message;
         }
 
         // GET: Directors
         public IActionResult Index()
         {
-            // Get collection service logic:
             var list = _directorService.List();
-            return View(list); // return response collection as model to the Index view
+            return View(list);
         }
 
         // GET: Directors/Details/5
         public IActionResult Details(int id)
         {
-            // Get item service logic:
             var item = _directorService.Item(id);
-            return View(item); // return response item as model to the Details view
+            return View(item);
         }
 
         // GET: Directors/Create
-        [Authorize(Roles = "Admin")] // Only Admin can create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            SetViewData(); // set ViewData dictionary to carry extra data other than the model to the view
-            return View(); // return Create view with no model
+            SetViewData();
+            return View();
         }
 
         // POST: Directors/Create
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")] // Only Admin can create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(DirectorRequest director)
         {
-            if (ModelState.IsValid) // check data annotation validation errors in the request
+            if (ModelState.IsValid)
             {
-                // Insert item service logic:
                 var response = _directorService.Create(director);
                 if (response.IsSuccessful)
                 {
-                    SetTempData(response.Message); // set TempData dictionary to carry the message to the redirected action's view
-                    return RedirectToAction(nameof(Details), new { id = response.Id }); // redirect to Details action with id parameter as response.Id route value
+                    SetTempData(response.Message); 
+                    return RedirectToAction(nameof(Details), new { id = response.Id });
                 }
-                ModelState.AddModelError("", response.Message); // to display service error message in the validation summary of the view
+                ModelState.AddModelError("", response.Message);
             }
-            SetViewData(); // set ViewData dictionary to carry extra data other than the model to the view
-            return View(director); // return request as model to the Create view
+            SetViewData();
+            return View(director);
         }
 
         // GET: Directors/Edit/5
-        [Authorize(Roles = "Admin")] // Only Admin can edit
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
-            // Get item to edit service logic:
             var item = _directorService.Edit(id);
-            SetViewData(); // set ViewData dictionary to carry extra data other than the model to the view
-            return View(item); // return request as model to the Edit view
+            SetViewData();
+            return View(item);
         }
 
         // POST: Directors/Edit
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")] // Only Admin can edit
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(DirectorRequest director)
         {
-            if (ModelState.IsValid) // check data annotation validation errors in the request
+            if (ModelState.IsValid)
             {
-                // Update item service logic:
                 var response = _directorService.Update(director);
                 if (response.IsSuccessful)
                 {
-                    SetTempData(response.Message); // set TempData dictionary to carry the message to the redirected action's view
-                    return RedirectToAction(nameof(Details), new { id = response.Id }); // redirect to Details action with id parameter as response.Id route value
+                    SetTempData(response.Message);
+                    return RedirectToAction(nameof(Details), new { id = response.Id });
                 }
-                ModelState.AddModelError("", response.Message); // to display service error message in the validation summary of the view
+                ModelState.AddModelError("", response.Message);
             }
-            SetViewData(); // set ViewData dictionary to carry extra data other than the model to the view
-            return View(director); // return request as model to the Edit view
+            SetViewData();
+            return View(director);
         }
 
         // GET: Directors/Delete/5
-        [Authorize(Roles = "Admin")] // Only Admin can delete
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
-            // Get item to delete service logic:
             var item = _directorService.Item(id);
-            return View(item); // return response item as model to the Delete view
+            return View(item);
         }
 
         // POST: Directors/Delete
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
-        [Authorize(Roles = "Admin")] // Only Admin can delete
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteConfirmed(int id)
         {
-            // Delete item service logic:
             var response = _directorService.Delete(id);
-            SetTempData(response.Message); // set TempData dictionary to carry the message to the redirected action's view
-            return RedirectToAction(nameof(Index)); // redirect to the Index action
+            SetTempData(response.Message);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

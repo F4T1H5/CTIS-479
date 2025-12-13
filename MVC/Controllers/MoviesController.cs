@@ -9,10 +9,9 @@ using APP.Models;
 
 namespace MVC.Controllers
 {
-    [Authorize] // All users must be authenticated to access any action
+    [Authorize]
     public class MoviesController : Controller
     {
-        // Service injections:
         private readonly IService<MovieRequest, MovieResponse> _movieService;
         private readonly IService<DirectorRequest, DirectorResponse> _directorService;
         private readonly IService<GenreRequest, GenreResponse> _genreService;
@@ -30,15 +29,8 @@ namespace MVC.Controllers
 
         private void SetViewData()
         {
-            /*
-            ViewBag and ViewData are the same collection (dictionary).
-            They carry extra data other than the model from a controller action to its view, or between views.
-            */
-
-            // One-to-many (Movie -> Director)
             ViewData["DirectorId"] = new SelectList(_directorService.List(), "Id", "FullName");
 
-            // Many-to-many (Movie <-> Genre) through MovieGenre
             ViewBag.GenreIds = new MultiSelectList(_genreService.List(), "Id", "Name");
         }
 
@@ -62,7 +54,7 @@ namespace MVC.Controllers
         }
 
         // GET: Movies/Create
-        [Authorize(Roles = "Admin")] // Only Admin can create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             SetViewData();
@@ -71,7 +63,7 @@ namespace MVC.Controllers
 
         // POST: Movies/Create
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")] // Only Admin can create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create(MovieRequest movie)
         {
             if (ModelState.IsValid)
@@ -84,14 +76,12 @@ namespace MVC.Controllers
                 }
                 ModelState.AddModelError("", response.Message);
             }
-
-            // IMPORTANT: must repopulate dropdowns/multiselects when returning View(movie)
             SetViewData();
             return View(movie);
         }
 
         // GET: Movies/Edit/5
-        [Authorize(Roles = "Admin")] // Only Admin can edit
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             var item = _movieService.Edit(id);
@@ -101,7 +91,7 @@ namespace MVC.Controllers
 
         // POST: Movies/Edit
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")] // Only Admin can edit
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(MovieRequest movie)
         {
             if (ModelState.IsValid)
@@ -114,14 +104,12 @@ namespace MVC.Controllers
                 }
                 ModelState.AddModelError("", response.Message);
             }
-
-            // IMPORTANT: must repopulate dropdowns/multiselects when returning View(movie)
             SetViewData();
             return View(movie);
         }
 
         // GET: Movies/Delete/5
-        [Authorize(Roles = "Admin")] // Only Admin can delete
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var item = _movieService.Item(id);
@@ -130,7 +118,7 @@ namespace MVC.Controllers
 
         // POST: Movies/Delete
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
-        [Authorize(Roles = "Admin")] // Only Admin can delete
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteConfirmed(int id)
         {
             var response = _movieService.Delete(id);
