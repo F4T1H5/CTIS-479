@@ -238,5 +238,11 @@ namespace MVC.Controllers
             }
             return View(request);
         }
+
+        [Route("~/[action]")]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
