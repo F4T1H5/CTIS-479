@@ -52,7 +52,7 @@
                                 @Html.DisplayNameFor(model => model.Password)
                             </div>
                             <div class="col-md-8 col-12">
-                                @Html.DisplayFor(model => model.Password)
+                                @(new string('•', Model.Password?.Length ?? 0))
                             </div>
                         </div>
 
