@@ -37,27 +37,49 @@ namespace MVC.Controllers
             var list = _genreService.List();
             return View(list);
         }
+        bool IsOwnAccount(int id)
+        {
+            return id.ToString() == (User.Claims.SingleOrDefault(claim => claim.Type == "Id")?.Value ?? string.Empty);
+        }
 
         // GET: Genres/Details/5
         public IActionResult Details(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var item = _genreService.Item(id);
             return View(item); 
         }
 
         // GET: Genres/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Create()
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             SetViewData();
             return View();
         }
 
         // POST: Genres/Create
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Create(GenreRequest genre)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (ModelState.IsValid)
             {
                 var response = _genreService.Create(genre);
@@ -73,9 +95,15 @@ namespace MVC.Controllers
         }
 
         // GET: Genres/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Edit(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var item = _genreService.Edit(id);
             SetViewData();
             return View(item);
@@ -83,9 +111,15 @@ namespace MVC.Controllers
 
         // POST: Genres/Edit
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Edit(GenreRequest genre)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (ModelState.IsValid)
             {
                 var response = _genreService.Update(genre);
@@ -101,18 +135,30 @@ namespace MVC.Controllers
         }
 
         // GET: Genres/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var item = _genreService.Item(id);
             return View(item);
         }
 
         // POST: Genres/Delete
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult DeleteConfirmed(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var response = _genreService.Delete(id);
             SetTempData(response.Message);
             return RedirectToAction(nameof(Index));

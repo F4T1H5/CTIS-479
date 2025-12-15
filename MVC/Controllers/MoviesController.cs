@@ -46,26 +46,49 @@ namespace MVC.Controllers
             return View(list);
         }
 
+        bool IsOwnAccount(int id)
+        {
+            return id.ToString() == (User.Claims.SingleOrDefault(claim => claim.Type == "Id")?.Value ?? string.Empty);
+        }
+
         // GET: Movies/Details/5
+        [Authorize]
         public IActionResult Details(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
             var item = _movieService.Item(id);
             return View(item);
         }
 
         // GET: Movies/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Create()
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             SetViewData();
             return View();
         }
 
         // POST: Movies/Create
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Create(MovieRequest movie)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (ModelState.IsValid)
             {
                 var response = _movieService.Create(movie);
@@ -81,9 +104,15 @@ namespace MVC.Controllers
         }
 
         // GET: Movies/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Edit(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var item = _movieService.Edit(id);
             SetViewData();
             return View(item);
@@ -91,9 +120,15 @@ namespace MVC.Controllers
 
         // POST: Movies/Edit
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Edit(MovieRequest movie)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (ModelState.IsValid)
             {
                 var response = _movieService.Update(movie);
@@ -109,18 +144,30 @@ namespace MVC.Controllers
         }
 
         // GET: Movies/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var item = _movieService.Item(id);
             return View(item);
         }
 
         // POST: Movies/Delete
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public IActionResult DeleteConfirmed(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var response = _movieService.Delete(id);
             SetTempData(response.Message);
             return RedirectToAction(nameof(Index));

@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using APP.Models;
 using CORE.APP.Services;
-using APP.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 // Generated from Custom MVC Template.
 
 namespace MVC.Controllers
 {
+    [Authorize]
     public class RolesController : Controller
     {
         private readonly IService<RoleRequest, RoleResponse> _roleService;

@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using APP.Models;
 using CORE.APP.Services;
-using APP.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 // Generated from Custom MVC Template.
 
 namespace MVC.Controllers
 {
+    [Authorize]
     public class GroupsController : Controller
     {
         private readonly IService<GroupRequest, GroupResponse> _groupService;
@@ -33,14 +35,31 @@ namespace MVC.Controllers
             return View(list);
         }
 
+        bool IsOwnAccount(int id)
+        {
+            return id.ToString() == (User.Claims.SingleOrDefault(claim => claim.Type == "Id")?.Value ?? string.Empty);
+        }
+
         public IActionResult Details(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var item = _groupService.Item(id);
             return View(item);
         }
 
         public IActionResult Create()
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             SetViewData();
             return View();
         }
@@ -48,6 +67,12 @@ namespace MVC.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Create(GroupRequest @group)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (ModelState.IsValid)
             {
                 var response = _groupService.Create(@group);
@@ -64,6 +89,12 @@ namespace MVC.Controllers
 
         public IActionResult Edit(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var item = _groupService.Edit(id);
             SetViewData();
             return View(item);
@@ -72,6 +103,12 @@ namespace MVC.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Edit(GroupRequest @group)
         {
+            if (!User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             if (ModelState.IsValid)
             {
                 var response = _groupService.Update(@group);
@@ -88,6 +125,12 @@ namespace MVC.Controllers
 
         public IActionResult Delete(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var item = _groupService.Item(id);
             return View(item);
         }
@@ -95,6 +138,12 @@ namespace MVC.Controllers
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {
+            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
+            {
+                SetTempData("You are not authorized for this operation!");
+                return RedirectToAction(nameof(Index));
+            }
+
             var response = _groupService.Delete(id);
             SetTempData(response.Message);
             return RedirectToAction(nameof(Index));
