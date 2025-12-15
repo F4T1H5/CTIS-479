@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVC.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class GroupsController : Controller
     {
         private readonly IService<GroupRequest, GroupResponse> _groupService;

@@ -8,7 +8,7 @@ using APP.Models;
 
 namespace MVC.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class DirectorsController : Controller
     {
         private readonly IService<DirectorRequest, DirectorResponse> _directorService;
@@ -36,49 +36,24 @@ namespace MVC.Controllers
             return View(list);
         }
 
-        bool IsOwnAccount(int id)
-        {
-            return id.ToString() == (User.Claims.SingleOrDefault(claim => claim.Type == "Id")?.Value ?? string.Empty);
-        }
-
         // GET: Directors/Details/5
         public IActionResult Details(int id)
         {
-            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
-            {
-                SetTempData("You are not authorized for this operation!");
-                return RedirectToAction(nameof(Index));
-            }
-
             var item = _directorService.Item(id);
             return View(item);
         }
 
         // GET: Directors/Create
-        [Authorize]
         public IActionResult Create()
         {
-            if (!User.IsInRole("Admin"))
-            {
-                SetTempData("You are not authorized for this operation!");
-                return RedirectToAction(nameof(Index));
-            }
-
             SetViewData();
             return View();
         }
 
         // POST: Directors/Create
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize]
         public IActionResult Create(DirectorRequest director)
         {
-            if (!User.IsInRole("Admin"))
-            {
-                SetTempData("You are not authorized for this operation!");
-                return RedirectToAction(nameof(Index));
-            }
-
             if (ModelState.IsValid)
             {
                 var response = _directorService.Create(director);
@@ -94,15 +69,8 @@ namespace MVC.Controllers
         }
 
         // GET: Directors/Edit/5
-        [Authorize]
         public IActionResult Edit(int id)
         {
-            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
-            {
-                SetTempData("You are not authorized for this operation!");
-                return RedirectToAction(nameof(Index));
-            }
-
             var item = _directorService.Edit(id);
             SetViewData();
             return View(item);
@@ -110,15 +78,8 @@ namespace MVC.Controllers
 
         // POST: Directors/Edit
         [HttpPost, ValidateAntiForgeryToken]
-        [Authorize]
         public IActionResult Edit(DirectorRequest director)
         {
-            if (!User.IsInRole("Admin"))
-            {
-                SetTempData("You are not authorized for this operation!");
-                return RedirectToAction(nameof(Index));
-            }
-
             if (ModelState.IsValid)
             {
                 var response = _directorService.Update(director);
@@ -134,30 +95,16 @@ namespace MVC.Controllers
         }
 
         // GET: Directors/Delete/5
-        [Authorize]
         public IActionResult Delete(int id)
         {
-            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
-            {
-                SetTempData("You are not authorized for this operation!");
-                return RedirectToAction(nameof(Index));
-            }
-
             var item = _directorService.Item(id);
             return View(item);
         }
 
         // POST: Directors/Delete
         [HttpPost, ValidateAntiForgeryToken, ActionName("Delete")]
-        [Authorize]
         public IActionResult DeleteConfirmed(int id)
         {
-            if (!IsOwnAccount(id) && !User.IsInRole("Admin"))
-            {
-                SetTempData("You are not authorized for this operation!");
-                return RedirectToAction(nameof(Index));
-            }
-
             var response = _directorService.Delete(id);
             SetTempData(response.Message);
             return RedirectToAction(nameof(Index));

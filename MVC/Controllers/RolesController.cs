@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MVC.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
         private readonly IService<RoleRequest, RoleResponse> _roleService;
