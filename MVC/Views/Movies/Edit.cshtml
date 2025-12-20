@@ -81,6 +81,15 @@
                                 </div>
                             </div>
 
+                            <!-- GenreIds -->
+                            <div class="row mb-3">
+                                <label asp-for="GenreIds" class="col-md-3 col-12 col-form-label fw-semibold"></label>
+                                <div class="col-md-9 col-12">
+                                    <select multiple asp-for="GenreIds" class="form-select" asp-items="ViewBag.GenreIds"></select>
+                                    <span asp-validation-for="GenreIds" class="text-danger small"></span>
+                                </div>
+                            </div>
+
                             @* Many-to-many example (kept) *@
                             @*
                             <div class="row mb-3">

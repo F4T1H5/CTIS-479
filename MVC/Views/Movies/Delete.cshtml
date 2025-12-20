@@ -62,7 +62,7 @@
                                 @Html.DisplayNameFor(model => model.ReleaseDate)
                             </div>
                             <div class="col-md-8 col-12">
-                                @Html.DisplayFor(model => model.ReleaseDate)
+                                @Model.ReleaseDateF
                             </div>
                         </div>
 
@@ -71,7 +71,7 @@
                                 @Html.DisplayNameFor(model => model.TotalRevenue)
                             </div>
                             <div class="col-md-8 col-12">
-                                @Html.DisplayFor(model => model.TotalRevenue)
+                                @Model.TotalRevenueF
                             </div>
                         </div>
 
@@ -81,6 +81,29 @@
                             </div>
                             <div class="col-md-8 col-12">
                                 @Html.DisplayFor(model => model.Director)
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 col-12 text-muted fw-semibold">
+                                @Html.DisplayNameFor(model => model.Genres)
+                            </div>
+                            <div class="col-md-8 col-12">
+                                @if (Model.Genres != null && Model.Genres.Any())
+                                {
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @foreach (var genre in Model.Genres)
+                                        {
+                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                                                @genre
+                                            </span>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted fst-italic">No genres assigned</span>
+                                }
                             </div>
                         </div>
 
