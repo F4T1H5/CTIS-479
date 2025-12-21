@@ -121,7 +121,7 @@ namespace MVC.Controllers
 
         [HttpPost, ValidateAntiForgeryToken]
         [Authorize]
-        public IActionResult Edit(UserRequest user)
+        public async Task<IActionResult> Edit(UserRequest user)
         {
             if (!IsOwnAccount(user.Id) && !User.IsInRole("Admin"))
             {
@@ -129,18 +129,24 @@ namespace MVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Because we don't get the values for the Score and RoleIds properties from the user request for users not in
-            // the Admin role, and Score and RoleIds are required, we must remove the ModelState error for the Score and
-            // RoleIds properties to prevent validation failure.
-            //if (!User.IsInRole("Admin"))
-            //{
-            //    ModelState.Remove(nameof(UserRequest.Score));
-            //    ModelState.Remove(nameof(UserRequest.RoleIds));
-            //}
+            if (string.IsNullOrWhiteSpace(user.Password))
+            {
+                ModelState.Remove(nameof(UserRequest.Password));
+            }
 
             if (ModelState.IsValid)
             {
-                var response = _userService.Update(user);
+                var userService = _userService as UserService;
+                var currentUserId = int.Parse(User.Claims.SingleOrDefault(c => c.Type == "Id")?.Value ?? "0");
+                
+                if (string.IsNullOrWhiteSpace(user.Password))
+                {
+                    var existingUser = userService.Edit(user.Id);
+                    user.Password = existingUser.Password;
+                }
+                
+                var response = await userService.UpdateWithRefresh(user, currentUserId);
+                
                 if (response.IsSuccessful)
                 {
                     SetTempData(response.Message);

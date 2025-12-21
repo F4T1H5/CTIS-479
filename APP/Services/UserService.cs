@@ -233,5 +233,43 @@ namespace APP.Services
                 RoleIds = [roleEntity.Id]
             });
         }
+
+        public async Task<CommandResponse> UpdateWithRefresh(UserRequest request, int currentUserId)
+        {
+            if (Query().Any(u => u.Id != request.Id && u.UserName == request.UserName.Trim() && u.IsActive == request.IsActive))
+                return Error("Active user with the same user name exists!");
+            
+            var entity = Query(false).SingleOrDefault(u => u.Id == request.Id);
+            if (entity is null)
+                return Error("User not found!");
+            
+            Delete(entity.UserRoles);
+            entity.UserName = request.UserName;
+            entity.Password = request.Password;
+            entity.FirstName = request.FirstName?.Trim();
+            entity.LastName = request.LastName?.Trim();
+            entity.Gender = request.Gender;
+            entity.BirthDate = request.BirthDate;
+            entity.Score = request.Score ?? 0;
+            entity.IsActive = request.IsActive;
+            entity.Address = request.Address?.Trim();
+            entity.GroupId = request.GroupId;
+            entity.RoleIds = request.RoleIds;
+            entity.CountryId = request.CountryId;
+            entity.CityId = request.CityId;
+            Update(entity);
+
+            if (entity.Id == currentUserId)
+            {
+                var updatedEntity = Query().SingleOrDefault(u => u.Id == entity.Id);
+                await _cookieAuthService.SignIn(
+                    updatedEntity.Id,
+                    updatedEntity.UserName,
+                    updatedEntity.UserRoles.Select(ur => ur.Role.Name).ToArray()
+                );
+            }
+
+            return Success("User updated successfully.", entity.Id);
+        }
     }
 }
