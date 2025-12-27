@@ -1,7 +1,7 @@
 # CTIS479 MVC Project
 
 ## Acknowledgements
-* Special thanks to my instructor, **Çağıl Alsaç**, for his guidance.
+* Special thanks to my instructor, **Cagil Alsac**, for his guidance.
 * This project was built using the [ProductsMVC](https://github.com/cagilalsac/ProductsMVC) repository as a primary reference and architectural template.
 
 ## Project Overview
