@@ -41,7 +41,7 @@ The solution follows a clean, layered architecture:
 - **Database:** SQLite (configured in `Program.cs`)
 - **ORM:** Entity Framework Core
 - **Frontend:** HTML5, CSS3, Bootstrap, jQuery
-- **IDEs:** Visual Studio / VS Code
+- **IDEs:** Visual Studio
 
 ## Getting Started
 
